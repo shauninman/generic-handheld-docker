@@ -9,6 +9,7 @@ RUN apt-get -y update && apt-get -y install \
 	autoconf \
 	automake \
 	bc \
+	binwalk \
     build-essential \
     bzip2 \
 	bzr \
@@ -24,6 +25,7 @@ RUN apt-get -y update && apt-get -y install \
 	gdisk \
 	genimage \
 	git \
+	golang \
 	imagemagick \
 	libconfuse-dev \
 	libncurses5-dev \
@@ -54,7 +56,11 @@ WORKDIR /root
 
 RUN git clone https://github.com/anestisb/android-unpackbootimg && cd android-unpackbootimg && \
 	make && mv -t /usr/bin unpackbootimg mkbootimg && cd ../ && \
-	rm -rf android-unpackbootimg
+	rm -rf android-unpackbootimg && \
+	git clone https://github.com/Evsio0n/rsce-go && cd rsce-go && \
+	go mod download && go mod tidy && go build -o rsce_tool && \
+	cp rsce_tool /usr/local/bin/ && cd ../ && \
+	rm -rf rsce-go
 
 VOLUME /root/workspace
 WORKDIR /root/workspace
